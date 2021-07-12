@@ -41,6 +41,7 @@ import net.fabricmc.accesswidener.AccessWidenerReader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.LanguageAdapter;
 import net.fabricmc.loader.api.MappingResolver;
+import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.impl.discovery.ArgumentModCandidateFinder;
@@ -253,7 +254,7 @@ public final class FabricLoaderImpl extends net.fabricmc.loader.FabricLoader {
 		// add mods to classpath
 		// TODO: This can probably be made safer, but that's a long-term goal
 		for (ModContainerImpl mod : mods) {
-			if (!mod.getInfo().getId().equals("fabricloader") && !mod.getInfo().getType().equals("builtin")) {
+			if (!mod.getMetadata().getId().equals("fabricloader") && !mod.getInfo().getType().equals("builtin")) {
 				FabricLauncherBase.getLauncher().addToClassPath(mod.getOriginPath());
 			}
 		}
@@ -322,8 +323,12 @@ public final class FabricLoaderImpl extends net.fabricmc.loader.FabricLoader {
 	}
 
 	@Override
-	public Collection<net.fabricmc.loader.api.ModContainer> getAllMods() {
+	public Collection<ModContainer> getAllMods() {
 		return Collections.unmodifiableList(mods);
+	}
+
+	public List<ModContainerImpl> getModsInternal() {
+		return mods;
 	}
 
 	@Override
